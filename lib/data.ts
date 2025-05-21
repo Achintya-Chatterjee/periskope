@@ -1,80 +1,101 @@
 import type { Chat, Message } from "./types"
 
 // Sample messages for the chats
-const testElCentroMessages: Message[] = [
-  {
-    text: "CVFER",
-    sender: "Roshnag Airtel",
-    timestamp: new Date("2025-05-20T11:51:00"),
-    status: "read",
-  },
-  {
-    text: "CDERT",
-    sender: "Roshnag Airtel",
-    timestamp: new Date("2025-05-20T11:54:00"),
-    status: "read",
-  },
-  {
-    text: "hello",
-    sender: "Periskope",
-    timestamp: new Date("2025-05-20T12:07:00"),
-    status: "read",
-    phone: "99718 44008",
-  },
-  {
-    text: "Hello, South Euna!",
-    sender: "Roshnag Airtel",
-    timestamp: new Date("2025-05-20T08:01:00"),
-    status: "read",
-    phone: "63646 47925",
-  },
-  {
-    text: "Hello, Livonia!",
-    sender: "Roshnag Airtel",
-    timestamp: new Date("2025-05-20T08:01:00"),
-    status: "read",
-  },
-  {
-    text: "test el centro",
-    sender: "Periskope",
-    timestamp: new Date("2025-05-20T09:49:00"),
-    status: "read",
-    phone: "99718 44008",
-    email: "bharat@hashabs.dev",
-  },
-  {
-    text: "CDERT",
-    sender: "Roshnag Airtel",
-    timestamp: new Date("2025-05-20T09:49:00"),
-    status: "read",
-    phone: "63646 47925",
-  },
-  {
-    text: "testing",
-    sender: "Periskope",
-    timestamp: new Date("2025-05-20T09:49:00"),
-    status: "read",
-    phone: "99718 44008",
-    email: "bharat@hashabs.dev",
-  },
-]
+// const testElCentroMessages: Message[] = [ // This variable is no longer needed
+//   // Original messages commented out for now
+//   /*
+//   {
+//     text: "CVFER",
+//     sender: "Roshnag Airtel",
+//     timestamp: new Date("2025-05-20T11:51:00"),
+//     status: "read",
+//   },
+//   {
+//     text: "CDERT",
+//     sender: "Roshnag Airtel",
+//     timestamp: new Date("2025-05-20T11:54:00"),
+//     status: "read",
+//   },
+//   {
+//     text: "hello",
+//     sender: "Periskope",
+//     timestamp: new Date("2025-05-20T12:07:00"),
+//     status: "read",
+//     phone: "99718 44008",
+//   },
+//   {
+//     text: "Hello, South Euna!",
+//     sender: "Roshnag Airtel",
+//     timestamp: new Date("2025-05-20T08:01:00"),
+//     status: "read",
+//     phone: "63646 47925",
+//   },
+//   {
+//     text: "Hello, Livonia!",
+//     sender: "Roshnag Airtel",
+//     timestamp: new Date("2025-05-20T08:01:00"),
+//     status: "read",
+//   },
+//   {
+//     text: "test el centro",
+//     sender: "Periskope",
+//     timestamp: new Date("2025-05-20T09:49:00"),
+//     status: "read",
+//     phone: "99718 44008",
+//     email: "bharat@hashabs.dev",
+//   },
+//   {
+//     text: "CDERT",
+//     sender: "Roshnag Airtel",
+//     timestamp: new Date("2025-05-20T09:49:00"),
+//     status: "read",
+//     phone: "63646 47925",
+//   },
+//   {
+//     text: "testing",
+//     sender: "Periskope",
+//     timestamp: new Date("2025-05-20T09:49:00"),
+//     status: "read",
+//     phone: "99718 44008",
+//     email: "bharat@hashabs.dev",
+//   },
+//   */
+//   // New minimal messages for Test El Centro (ID '1') - This is also removed
+//   /*
+//   {
+//     id: "tec_msg_1",
+//     text: "This is a new message from Other User for Test El Centro.",
+//     sender: "Other User",
+//     timestamp: new Date("2025-06-01T10:00:00"),
+//     status: "read",
+//   },
+//   {
+//     id: "tec_msg_2",
+//     text: "This is a new message from Periskope in Test El Centro.",
+//     sender: "Periskope",
+//     timestamp: new Date("2025-06-01T10:01:00"),
+//     status: "read", // This will trigger the BsCheckAll condition
+//   },
+//   */
+// ]
 
 // Sample chat data
 export const chats: Chat[] = [
-  {
-    id: "1",
-    name: "Test El Centro",
-    participants: ["Roshnag Airtel", "Roshnag Jio", "Bharat Kumar Ramesh", "Periskope"],
-    lastMessage: {
-      text: "Hello, Livonia!",
-      timestamp: new Date("2025-05-20T08:01:00"),
-    },
-    lastMessageTime: new Date("2025-05-20T08:01:00"),
-    lastMessageStatus: "read",
-    unreadCount: 0,
-    tags: ["Demo"],
-    messages: testElCentroMessages,
-  },
+  // Removed the problematic "Test El Centro" chat (ID "1")
+  // {
+  //   id: "1",
+  //   name: "Test El Centro",
+  //   participants: ["Other User", "Periskope"], // Simplified participants
+  //   lastMessage: {
+  //     text: "This is a new message from Periskope in Test El Centro.", // Updated last message
+  //     timestamp: new Date("2025-06-01T10:01:00"),
+  //   },
+  //   lastMessageTime: new Date("2025-06-01T10:01:00"),
+  //   lastMessageStatus: "read",
+  //   unreadCount: 0,
+  //   tags: ["Demo"],
+  //   messages: testElCentroMessages, // This now uses the new minimal messages defined above
+  // },
   {
     id: "2",
     name: "Test Skope Final 5",

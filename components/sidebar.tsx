@@ -1,127 +1,220 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import type { Chat } from "@/lib/types"
-import { FaSearch, FaFilter, FaHome, FaChartBar, FaUsers, FaBell, FaCog } from "react-icons/fa"
-import { BsChatLeftFill } from "react-icons/bs"
-import ChatListItem from "./chat-list-item"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
+import { useState } from "react";
+import type { Chat } from "@/lib/types";
+import { FaChartLine, FaListUl } from "react-icons/fa6";
+import { AiFillHome, AiFillMessage } from "react-icons/ai";
+import { IoTicketSharp } from "react-icons/io5";
+import { CiBullhorn } from "react-icons/ci";
+import { FaCodeBranch, FaSearch } from "react-icons/fa";
+import { RiContactsBookFill, RiFolderDownloadFill } from "react-icons/ri";
+import { GrGallery } from "react-icons/gr";
+import { MdChecklist } from "react-icons/md";
+import { IoIosSettings } from "react-icons/io";
+import { IoFilter } from "react-icons/io5";
+import { PiCirclesThreeBold } from "react-icons/pi";
+import { TbLayoutSidebarLeftExpandFilled } from "react-icons/tb";
+
+import ChatListItem from "./chat-list-item";
+
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface SidebarProps {
-  chats: Chat[]
-  selectedChat: Chat | null
-  onSelectChat: (chat: Chat) => void
-  searchQuery: string
-  onSearch: (query: string) => void
+  chats: Chat[];
+  selectedChat: Chat | null;
+  onSelectChat: (chat: Chat) => void;
+  searchQuery: string;
+  onSearch: (query: string) => void;
 }
 
-export default function Sidebar({ chats, selectedChat, onSelectChat, searchQuery, onSearch }: SidebarProps) {
-  const [isCustomFilterOpen, setIsCustomFilterOpen] = useState(false)
+export default function Sidebar({
+  chats,
+  selectedChat,
+  onSelectChat,
+  searchQuery,
+  onSearch,
+}: SidebarProps) {
+  const [isCustomFilterOpen, setIsCustomFilterOpen] = useState(false);
 
   return (
-    <div className="w-[380px] flex h-full border-r border-gray-200">
-      {/* Left navigation bar */}
-      <div className="w-16 bg-gray-50 flex flex-col items-center py-4 border-r border-gray-200">
-        <div className="mb-8">
-          <Avatar className="h-10 w-10 bg-green-600">
-            <AvatarImage src="/placeholder.svg?height=40&width=40" alt="P" />
-            <AvatarFallback className="bg-green-600 text-white text-lg">P</AvatarFallback>
-          </Avatar>
-          <div className="text-xs text-center mt-1 text-gray-600">12</div>
-        </div>
-
-        <div className="flex flex-col items-center space-y-6">
-          <Button variant="ghost" size="icon" className="rounded-full relative">
-            <FaHome className="h-5 w-5 text-gray-500" />
-          </Button>
-
-          <Button variant="ghost" size="icon" className="rounded-full bg-green-50 relative">
-            <BsChatLeftFill className="h-5 w-5 text-green-600" />
-            <span className="absolute -top-1 -right-1 bg-green-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              12
-            </span>
-          </Button>
-
-          <Button variant="ghost" size="icon" className="rounded-full relative">
-            <FaChartBar className="h-5 w-5 text-gray-500" />
-          </Button>
-
-          <Button variant="ghost" size="icon" className="rounded-full relative">
-            <FaUsers className="h-5 w-5 text-gray-500" />
-            <span className="absolute -top-1 -right-1 bg-yellow-400 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              1
-            </span>
-          </Button>
-
-          <Button variant="ghost" size="icon" className="rounded-full relative">
-            <FaBell className="h-5 w-5 text-gray-500" />
-          </Button>
-
-          <Button variant="ghost" size="icon" className="rounded-full relative mt-auto">
-            <FaCog className="h-5 w-5 text-gray-500" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Chat list */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden">
-        <div className="p-4 border-b border-gray-200">
-          <div className="flex items-center">
-            <div className="flex items-center text-gray-500 mr-2">
-              <BsChatLeftFill className="h-4 w-4 mr-2 text-gray-400" />
-              <h1 className="text-base font-normal">chats</h1>
-            </div>
-          </div>
-
-          <div className="mt-3 flex items-center space-x-2">
-            <div className="flex-1 flex items-center space-x-2">
-              <Button
-                variant={isCustomFilterOpen ? "default" : "outline"}
-                size="sm"
-                className={`text-xs px-3 py-1 h-8 ${isCustomFilterOpen ? "bg-green-600 hover:bg-green-700" : "text-green-600 border-green-600"}`}
-                onClick={() => setIsCustomFilterOpen(!isCustomFilterOpen)}
-              >
-                <FaFilter className="h-3 w-3 mr-2 text-current" />
-                Custom filter
-              </Button>
-
-              <Button variant="outline" size="sm" className="text-xs px-3 py-1 h-8 text-gray-600">
-                Save
-              </Button>
-            </div>
-
-            <div className="relative">
-              <FaSearch className="h-3 w-3 absolute left-2 top-2.5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search"
-                className="pl-8 pr-2 py-1 h-8 text-sm border border-gray-300 rounded-md w-32 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
-                value={searchQuery}
-                onChange={(e) => onSearch(e.target.value)}
-              />
-            </div>
-
-            <Button variant="outline" size="sm" className="text-xs px-3 py-1 h-8 text-gray-600">
-              <FaFilter className="h-3 w-3 mr-2 text-current" />
-              Filtered
-              <Badge className="ml-1 bg-green-600 h-5 w-5 p-0 flex items-center justify-center">3</Badge>
+    <>
+      <div className="flex h-full">
+        {/* Left navigation bar with logo */}
+        <div className="w-16 bg-white flex flex-col items-center py-4">
+          <div className="flex flex-col items-center flex-grow">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative mb-0"
+            >
+              <AiFillHome className="h-6 w-6 text-gray-600" />
             </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full bg-green-50 relative mb-0"
+            >
+              <AiFillMessage className="h-6 w-6 text-green-600" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative mb-0"
+            >
+              <IoTicketSharp className="h-6 w-6 text-gray-600" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative mb-0"
+            >
+              <FaChartLine className="h-6 w-6 text-gray-600" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative mb-0"
+            >
+              <FaListUl className="h-6 w-6 text-gray-600" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative mb-0"
+            >
+              <CiBullhorn className="h-6 w-6 text-gray-600" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative mb-0"
+            >
+              <FaCodeBranch className="h-6 w-6 text-gray-600" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative mb-0"
+            >
+              <RiContactsBookFill className="h-6 w-6 text-gray-600" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative mb-0"
+            >
+              <GrGallery className="h-6 w-6 text-gray-600" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative mb-0"
+            >
+              <MdChecklist className="h-6 w-6 text-gray-600" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative mb-0"
+            >
+              <IoIosSettings className="h-6 w-6 text-gray-600" />
+            </Button>
+
+            <div className="mt-auto flex flex-col">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full relative mb-0"
+              >
+                <PiCirclesThreeBold className="h-6 w-6 text-gray-600" />
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full relative mb-0"
+              >
+                <TbLayoutSidebarLeftExpandFilled className="h-6 w-6 text-gray-600" />
+              </Button>
+            </div>
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto">
-          {chats.map((chat) => (
-            <ChatListItem
-              key={chat.id}
-              chat={chat}
-              isSelected={selectedChat?.id === chat.id}
-              onClick={() => onSelectChat(chat)}
-            />
-          ))}
+        {/* Chat list sidebar */}
+        <div className="w-[364px] flex flex-col h-full overflow-hidden border-r border-gray-200">
+          <div className="p-4">
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
+                <Button
+                  size="sm"
+                  className={`text-xs px-3 py-1 h-8 rounded-md flex items-center font-semibold border-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 ${
+                    isCustomFilterOpen
+                      ? "bg-green-600 text-white hover:bg-green-700"
+                      : "text-green-600 bg-transparent hover:bg-green-100"
+                  }`}
+                  onClick={() => setIsCustomFilterOpen(!isCustomFilterOpen)}
+                >
+                  <RiFolderDownloadFill className="h-4 w-4 mr-2" />
+                  Custom filter
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs px-3 py-1 h-8 text-gray-600"
+                >
+                  Save
+                </Button>
+              </div>
+
+              <div className="relative">
+                <FaSearch className="h-3 w-3 absolute left-2 top-2.5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="pl-8 pr-2 py-1 h-8 text-sm border border-gray-300 rounded-md w-24 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
+                  value={searchQuery}
+                  onChange={(e) => onSearch(e.target.value)}
+                />
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                className="text-xs px-3 py-1 h-8 text-gray-600"
+              >
+                <IoFilter className="h-3 w-3 mr-2 text-current" />
+                Filtered
+                <Badge className="ml-1 bg-green-600 h-5 w-5 p-0 flex items-center justify-center">
+                  3
+                </Badge>
+              </Button>
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto">
+            {chats.map((chat) => (
+              <ChatListItem
+                key={chat.id}
+                chat={chat}
+                isSelected={selectedChat?.id === chat.id}
+                onClick={() => onSelectChat(chat)}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-  )
+    </>
+  );
 }
