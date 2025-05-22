@@ -14,43 +14,43 @@ export default function RightMainSidebar() {
   return (
     <div className="fixed top-14 right-0 w-16 h-[calc(100%-3.5rem)] bg-white flex flex-col items-center py-4 border-l border-gray-200 z-10">
       <div className="flex flex-col items-center flex-grow space-y-2">
-        <Button variant="ghost" size="icon" className="rounded-full relative">
+        <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Expand sidebar">
           <TbLayoutSidebarRightExpandFilled className="h-6 w-6 text-gray-600" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="rounded-full relative">
+        <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Refresh">
           <LuRefreshCw className="h-6 w-6 text-gray-600" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="rounded-full relative">
+        <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Edit">
           <LuPencilLine className="h-6 w-6 text-gray-600" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="rounded-full relative">
+        <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Paragraph">
           <BsTextParagraph className="h-6 w-6 text-gray-600" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="rounded-full relative">
+        <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Checklist">
           <RiListCheck2 className="h-6 w-6 text-gray-600" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="rounded-full relative">
+        <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Hubspot">
           <FaHubspot className="h-6 w-6 text-gray-600" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="rounded-full relative">
+        <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Groups">
           <MdOutlineGroups className="h-6 w-6 text-gray-600" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="rounded-full relative">
+        <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Mentions">
           <IoAtSharp className="h-6 w-6 text-gray-600" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="rounded-full relative">
+        <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="Gallery">
           <GrGallery className="h-6 w-6 text-gray-600" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="rounded-full relative">
+        <Button variant="ghost" size="icon" className="rounded-full relative" aria-label="List settings">
           <RiListSettingsLine className="h-6 w-6 text-gray-600" />
         </Button>
       </div>

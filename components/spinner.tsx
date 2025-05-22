@@ -21,6 +21,8 @@ const Spinner: React.FC<SpinnerProps> = ({ size = "large" }) => {
     <div className={containerClasses}>
       <div
         className={`animate-spin rounded-full border-green-500 ${sizeClasses}`}
+        role="status"
+        aria-live="polite"
       ></div>
     </div>
   );
