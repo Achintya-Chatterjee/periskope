@@ -2,7 +2,9 @@
 
 import type React from "react";
 import { useState, useRef, useEffect } from "react";
-import type { Chat } from "@/lib/types";
+import { supabase } from "@/lib/supabaseClient";
+import { useAuth } from "@/components/auth-provider";
+import type { Chat, Message as MessageType } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { FaMicrophone, FaRegClock } from "react-icons/fa";
 import { BsEmojiSmile } from "react-icons/bs";
@@ -18,21 +20,104 @@ interface ChatWindowProps {
   onSendMessage: (text: string) => void;
 }
 
+const transformMessage = (rawMessage: any): MessageType => {
+  return {
+    id: rawMessage.id,
+    chat_id: rawMessage.chat_id,
+    text: rawMessage.content,
+    sender_id: rawMessage.sender_id,
+    created_at: rawMessage.created_at,
+    timestamp: rawMessage.created_at
+      ? new Date(rawMessage.created_at)
+      : new Date(),
+    status: rawMessage.status,
+    attachment_url: rawMessage.attachment_url,
+  } as MessageType;
+};
+
 export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
   const [messageText, setMessageText] = useState("");
+  const [displayedMessages, setDisplayedMessages] = useState<MessageType[]>([]);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
-    if (chat && chat.messages) {
-      scrollToBottom();
-    }
-  }, [chat, chat?.messages]);
+    if (!chat?.id) return;
+
+    const fetchMessages = async () => {
+      setIsLoadingMessages(true);
+      const { data, error } = await supabase
+        .from("messages")
+        .select("*")
+        .eq("chat_id", chat.id)
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error("Error fetching messages:", error);
+        setDisplayedMessages([]);
+      } else {
+        setDisplayedMessages((data || []).map(transformMessage));
+      }
+      setIsLoadingMessages(false);
+    };
+
+    fetchMessages();
+  }, [chat.id]);
+
+  useEffect(() => {
+    if (!chat?.id) return;
+
+    const channel = supabase
+      .channel(`chat:${chat.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "messages",
+          filter: `chat_id=eq.${chat.id}`,
+        },
+        (payload) => {
+          console.log("New message received via realtime:", payload);
+          const transformedNewMessage = transformMessage(payload.new);
+          setDisplayedMessages((prevMessages) => {
+            if (
+              prevMessages.find((msg) => msg.id === transformedNewMessage.id)
+            ) {
+              return prevMessages;
+            }
+            return [...prevMessages, transformedNewMessage];
+          });
+        }
+      )
+      .subscribe((status, err) => {
+        if (status === "SUBSCRIBED") {
+          console.log(`Subscribed to chat ${chat.id}`);
+        }
+        if (status === "CHANNEL_ERROR") {
+          console.error(`Realtime channel error for chat ${chat.id}:`, err);
+        }
+        if (status === "TIMED_OUT") {
+          console.warn(`Realtime subscription timed out for chat ${chat.id}`);
+        }
+      });
+
+    return () => {
+      console.log(`Unsubscribing from chat ${chat.id}`);
+      supabase.removeChannel(channel);
+    };
+  }, [chat.id]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [displayedMessages]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessageInternal = () => {
     if (messageText.trim()) {
       onSendMessage(messageText);
       setMessageText("");
@@ -42,20 +127,28 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleSendMessage();
+      handleSendMessageInternal();
     }
   };
+
+  if (isLoadingMessages) {
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        <p>Loading messages...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 flex flex-col h-full bg-white">
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
         <div className="max-w-4xl mx-auto space-y-4">
-          {chat.messages?.map((message, index) => (
+          {displayedMessages.map((message, index) => (
             <ChatMessage
               key={message.id || index}
               message={message}
-              isCurrentUser={message.sender === "Periskope"}
+              isCurrentUser={message.sender_id === user?.id}
             />
           ))}
           <div ref={messagesEndRef} />
@@ -79,7 +172,7 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
           <div className="flex items-center ml-4">
             <Button
               className="bg-green-600 hover:bg-green-700 rounded-full p-3 text-white h-10 w-10 flex items-center justify-center"
-              onClick={handleSendMessage}
+              onClick={handleSendMessageInternal}
               aria-label="Send message"
             >
               <IoSend className="h-5 w-5" />

@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "./auth-provider";
 import type { Chat } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -16,6 +17,7 @@ interface HeaderProps {
 }
 
 export default function Header({ selectedChat, onBack }: HeaderProps) {
+  const { signOut, user } = useAuth();
   return (
     <div className="h-14 border-b border-gray-200 flex items-center justify-between px-4 bg-white fixed top-0 left-0 right-0 z-20">
       <div className="flex items-center h-full">
@@ -89,6 +91,17 @@ export default function Header({ selectedChat, onBack }: HeaderProps) {
         >
           <HiOutlineListBullet className="h-5 w-5" />
         </Button>
+
+        {user && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-gray-600 h-9 text-sm font-normal border-gray-200"
+            onClick={signOut}
+          >
+            Sign Out
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -1,12 +1,12 @@
 export interface Message {
   id?: string
+  chat_id?: string
   text: string
-  sender: string
-  timestamp: Date
+  sender_id: string
+  created_at: string
+  timestamp?: Date
   status?: "sent" | "delivered" | "read"
-  avatar?: string
-  phone?: string
-  email?: string
+  attachment_url?: string
 }
 
 export interface Chat {
@@ -25,4 +25,12 @@ export interface Chat {
   phoneExt?: string
   participants?: string[]
   messages?: Message[]
+}
+
+export interface Profile {
+  id: string; 
+  email?: string;
+  full_name?: string;
+  avatar_url?: string;
+  updated_at?: string; 
 }
