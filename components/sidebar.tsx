@@ -26,6 +26,9 @@ interface SidebarProps {
   onSelectChat: (chat: Chat) => void;
   searchQuery: string;
   onSearch: (query: string) => void;
+  allAvailableTags: string[];
+  activeTagFilter: string | null;
+  onTagFilterChange: (tag: string | null) => void;
 }
 
 export default function Sidebar({
@@ -34,6 +37,9 @@ export default function Sidebar({
   onSelectChat,
   searchQuery,
   onSearch,
+  allAvailableTags,
+  activeTagFilter,
+  onTagFilterChange,
 }: SidebarProps) {
   const [isCustomFilterOpen, setIsCustomFilterOpen] = useState(false);
 
@@ -202,6 +208,41 @@ export default function Sidebar({
               </Button>
             </div>
           </div>
+
+          {/* Tags Filter Area */}
+          {allAvailableTags.length > 0 && (
+            <div className="px-4 pt-2 pb-2 border-b border-gray-200">
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  variant={!activeTagFilter ? "secondary" : "outline"}
+                  className={`text-xs px-3 py-1 h-auto rounded-full ${
+                    !activeTagFilter
+                      ? "bg-green-600 text-white hover:bg-green-700"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`}
+                  onClick={() => onTagFilterChange(null)}
+                >
+                  All Chats
+                </Button>
+                {allAvailableTags.map((tag) => (
+                  <Button
+                    key={tag}
+                    size="sm"
+                    variant={activeTagFilter === tag ? "secondary" : "outline"}
+                    className={`text-xs px-3 py-1 h-auto rounded-full ${
+                      activeTagFilter === tag
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "text-gray-700 hover:bg-gray-100"
+                    }`}
+                    onClick={() => onTagFilterChange(tag)}
+                  >
+                    {tag}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="flex-1 overflow-y-auto">
             {chats.map((chat) => (

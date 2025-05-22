@@ -4,7 +4,7 @@ import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/components/auth-provider";
-import type { Chat, Message as MessageType } from "@/lib/types";
+import type { Chat, Message as MessageType, Profile } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { FaMicrophone, FaRegClock } from "react-icons/fa";
 import { BsEmojiSmile } from "react-icons/bs";
@@ -14,6 +14,7 @@ import { ImAttachment } from "react-icons/im";
 import { IoSend } from "react-icons/io5";
 import { PiClockClockwiseLight, PiStarFourLight } from "react-icons/pi";
 import { IoMdListBox } from "react-icons/io";
+import Spinner from "@/components/spinner";
 
 interface ChatWindowProps {
   chat: Chat;
@@ -39,30 +40,62 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
   const [messageText, setMessageText] = useState("");
   const [displayedMessages, setDisplayedMessages] = useState<MessageType[]>([]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const [participantProfiles, setParticipantProfiles] = useState<
+    Record<string, Pick<Profile, "id" | "full_name" | "avatar_url">>
+  >({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
 
   useEffect(() => {
     if (!chat?.id) return;
 
-    const fetchMessages = async () => {
+    const fetchChatData = async () => {
       setIsLoadingMessages(true);
-      const { data, error } = await supabase
+      const { data: messagesData, error: messagesError } = await supabase
         .from("messages")
         .select("*")
         .eq("chat_id", chat.id)
         .order("created_at", { ascending: true });
 
-      if (error) {
-        console.error("Error fetching messages:", error);
+      if (messagesError) {
+        console.error("Error fetching messages:", messagesError);
         setDisplayedMessages([]);
       } else {
-        setDisplayedMessages((data || []).map(transformMessage));
+        setDisplayedMessages((messagesData || []).map(transformMessage));
+      }
+
+      // Fetch participants and their profiles
+      type ParticipantWithProfile = {
+        user_id: string;
+        profiles: Pick<Profile, "id" | "full_name" | "avatar_url"> | null;
+      };
+
+      const { data: participantsData, error: participantsError } =
+        await supabase
+          .from("chat_participants")
+          .select("user_id, profiles(id, full_name, avatar_url)")
+          .eq("chat_id", chat.id)
+          .returns<ParticipantWithProfile[]>(); // Explicitly type the return
+
+      if (participantsError) {
+        console.error("Error fetching participants:", participantsError);
+        setParticipantProfiles({});
+      } else {
+        const profilesMap: Record<
+          string,
+          Pick<Profile, "id" | "full_name" | "avatar_url">
+        > = {};
+        participantsData?.forEach((p) => {
+          if (p.profiles) {
+            profilesMap[p.user_id] = p.profiles;
+          }
+        });
+        setParticipantProfiles(profilesMap);
       }
       setIsLoadingMessages(false);
     };
 
-    fetchMessages();
+    fetchChatData();
   }, [chat.id]);
 
   useEffect(() => {
@@ -134,7 +167,7 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
   if (isLoadingMessages) {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <p>Loading messages...</p>
+        <Spinner size="small" />
       </div>
     );
   }
@@ -144,13 +177,18 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
         <div className="max-w-4xl mx-auto space-y-4">
-          {displayedMessages.map((message, index) => (
-            <ChatMessage
-              key={message.id || index}
-              message={message}
-              isCurrentUser={message.sender_id === user?.id}
-            />
-          ))}
+          {displayedMessages.map((message, index) => {
+            const senderProfile = participantProfiles[message.sender_id];
+            return (
+              <ChatMessage
+                key={message.id || index}
+                message={message}
+                isCurrentUser={message.sender_id === user?.id}
+                senderFullName={senderProfile?.full_name || null}
+                senderAvatarUrl={senderProfile?.avatar_url || null}
+              />
+            );
+          })}
           <div ref={messagesEndRef} />
         </div>
       </div>

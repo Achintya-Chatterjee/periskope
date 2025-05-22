@@ -9,6 +9,8 @@ import Header from "./header";
 import RightMainSidebar from "./right-main-sidebar";
 import ChatContextHeader from "./chat-context-header";
 import type { Chat, Message as MessageType, Profile } from "@/lib/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import Spinner from "@/components/spinner";
 
 interface ParticipantWithProfile {
   user_id: string;
@@ -22,6 +24,8 @@ export default function ChatInterface() {
   const [userChats, setUserChats] = useState<Chat[]>([]);
   const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
   const [isLoadingChats, setIsLoadingChats] = useState(false);
+  const [activeTagFilter, setActiveTagFilter] = useState<string | null>(null);
+  const [allAvailableTags, setAllAvailableTags] = useState<string[]>([]);
 
   useEffect(() => {
     if (user && !authLoading) {
@@ -46,7 +50,7 @@ export default function ChatInterface() {
 
           const { data: chatsData, error: chatsError } = await supabase
             .from("chats")
-            .select("id, name, avatar_url, created_at")
+            .select("id, name, avatar_url, created_at, tags")
             .in("id", chatIds);
 
           if (chatsError) throw chatsError;
@@ -152,6 +156,7 @@ export default function ChatInterface() {
               id: chatEntry.id,
               name: chatName,
               avatar: chatAvatar || undefined,
+              tags: chatEntry.tags || [],
               lastMessage: lastMessageData
                 ? {
                     text: lastMessageData.content,
@@ -180,7 +185,11 @@ export default function ChatInterface() {
           );
 
           setUserChats(resolvedFormattedChats);
-          setFilteredChats(resolvedFormattedChats);
+          const uniqueTags = new Set<string>();
+          resolvedFormattedChats.forEach((chat) => {
+            chat.tags?.forEach((tag) => uniqueTags.add(tag));
+          });
+          setAllAvailableTags(Array.from(uniqueTags).sort());
         } catch (error) {
           console.error("Error fetching user chats: raw error object:", error);
           try {
@@ -228,6 +237,27 @@ export default function ChatInterface() {
   }, [user, authLoading]);
 
   useEffect(() => {
+    let chats = userChats;
+
+    if (searchQuery.trim() !== "") {
+      chats = chats.filter(
+        (chat) =>
+          chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (chat.lastMessage?.text
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ??
+            false)
+      );
+    }
+
+    if (activeTagFilter) {
+      chats = chats.filter((chat) => chat.tags?.includes(activeTagFilter));
+    }
+
+    setFilteredChats(chats);
+  }, [searchQuery, userChats, activeTagFilter]);
+
+  useEffect(() => {
     console.log("selectedChat changed:", selectedChat);
     if (selectedChat) {
       console.log(
@@ -246,17 +276,10 @@ export default function ChatInterface() {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    if (query.trim() === "") {
-      setFilteredChats(userChats);
-    } else {
-      const filtered = userChats.filter(
-        (chat) =>
-          chat.name.toLowerCase().includes(query.toLowerCase()) ||
-          (chat.lastMessage?.text.toLowerCase().includes(query.toLowerCase()) ??
-            false)
-      );
-      setFilteredChats(filtered);
-    }
+  };
+
+  const handleTagFilterChange = (tag: string | null) => {
+    setActiveTagFilter(tag);
   };
 
   const handleSendMessage = async (text: string) => {
@@ -309,17 +332,21 @@ export default function ChatInterface() {
   };
 
   if (authLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen w-screen">
-        <p>Authenticating...</p>
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (user && isLoadingChats) {
     return (
+      <div className="flex flex-col h-full items-center justify-center">
+        <Spinner size="small" />
+      </div>
+    );
+  }
+
+  if (!user && !authLoading) {
+    return (
       <div className="flex items-center justify-center h-screen w-screen">
-        <p>Loading chats...</p>
+        <p>Not authenticated.</p>
       </div>
     );
   }
@@ -335,6 +362,9 @@ export default function ChatInterface() {
           onSelectChat={handleSelectChat}
           searchQuery={searchQuery}
           onSearch={handleSearch}
+          allAvailableTags={allAvailableTags}
+          activeTagFilter={activeTagFilter}
+          onTagFilterChange={handleTagFilterChange}
         />
         <main className="flex-1 flex flex-col overflow-hidden">
           {selectedChat ? (
