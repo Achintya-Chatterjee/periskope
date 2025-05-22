@@ -72,6 +72,7 @@ export default function Header({ selectedChat, onBack }: HeaderProps) {
           variant="outline"
           size="icon"
           className="h-9 w-9 text-gray-600 border-gray-200"
+          aria-label="Download desktop app"
         >
           <TbDeviceDesktopDown className="h-5 w-5" />
         </Button>
@@ -80,6 +81,7 @@ export default function Header({ selectedChat, onBack }: HeaderProps) {
           variant="outline"
           size="icon"
           className="h-9 w-9 text-gray-600 border-gray-200"
+          aria-label="Toggle notifications"
         >
           <BiSolidBellOff className="h-5 w-5" />
         </Button>
@@ -88,6 +90,7 @@ export default function Header({ selectedChat, onBack }: HeaderProps) {
           variant="outline"
           size="icon"
           className="h-9 w-9 text-gray-600 border-gray-200"
+          aria-label="Toggle activity list"
         >
           <HiOutlineListBullet className="h-5 w-5" />
         </Button>

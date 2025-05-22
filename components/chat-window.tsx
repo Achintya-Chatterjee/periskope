@@ -224,6 +224,7 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
               variant="ghost"
               size="icon"
               className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md"
+              aria-label="Attach file"
             >
               <ImAttachment className="h-5 w-5" />
             </Button>
@@ -231,6 +232,7 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
               variant="ghost"
               size="icon"
               className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md"
+              aria-label="Add emoji"
             >
               <BsEmojiSmile className="h-5 w-5" />
             </Button>
@@ -238,6 +240,7 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
               variant="ghost"
               size="icon"
               className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md"
+              aria-label="Schedule message"
             >
               <FaRegClock className="h-5 w-5" />
             </Button>
@@ -245,6 +248,7 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
               variant="ghost"
               size="icon"
               className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md"
+              aria-label="Message history"
             >
               <PiClockClockwiseLight className="h-5 w-5" />
             </Button>
@@ -252,6 +256,7 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
               variant="ghost"
               size="icon"
               className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md"
+              aria-label="AI features"
             >
               <PiStarFourLight className="h-5 w-5" />
             </Button>
@@ -259,6 +264,7 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
               variant="ghost"
               size="icon"
               className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md"
+              aria-label="Templates"
             >
               <IoMdListBox className="h-5 w-5" />
             </Button>
@@ -266,6 +272,7 @@ export default function ChatWindow({ chat, onSendMessage }: ChatWindowProps) {
               variant="ghost"
               size="icon"
               className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md"
+              aria-label="Record voice message"
             >
               <FaMicrophone className="h-5 w-5" />
             </Button>

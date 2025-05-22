@@ -24,7 +24,7 @@ interface ManageParticipantsModalProps {
   currentUserId: string | undefined;
 }
 
-// Mock data - replace with actual fetching
+
 const mockUsers: Profile[] = [
   // { id: "user1", full_name: "Alice Wonderland", avatar_url: null, email: "alice@example.com" },
   // { id: "user2", full_name: "Bob The Builder", avatar_url: null, email: "bob@example.com" },

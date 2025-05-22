@@ -211,7 +211,7 @@ export default function Sidebar({
 
           {/* Tags Filter Area */}
           {allAvailableTags.length > 0 && (
-            <div className="px-4 pt-2 pb-2 border-b border-gray-200">
+            <div className="px-4 pt-2 pb-2 border-b border-gray-200" data-testid="tags-filter-area">
               <div className="flex flex-wrap gap-2">
                 <Button
                   size="sm"
