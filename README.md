@@ -26,7 +26,7 @@ This is a real-time chat application built as a take-home assignment for a Full-
     *   [React](https://reactjs.org/)
     *   [TypeScript](https://www.typescriptlang.org/)
     *   [Tailwind CSS](https://tailwindcss.com/) for styling
-    *   [shadcn/ui](https://ui.shadcn.com/) (likely, based on `components.json` - can be confirmed if used)
+    *   [shadcn/ui](https://ui.shadcn.com/) 
 *   **Backend & Database:**
     *   [Supabase](https://supabase.io/)
         *   Authentication
@@ -38,7 +38,7 @@ This is a real-time chat application built as a take-home assignment for a Full-
 ## Prerequisites
 
 *   Node.js (v18 or later recommended)
-*   pnpm (or npm/yarn, though `pnpm-lock.yaml` is present)
+*   pnpm Package Manager
 *   A Supabase account and project.
 
 ## Getting Started
@@ -48,7 +48,7 @@ Follow these instructions to set up and run the project locally.
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:Achintya-Chatterjee/periskope.git
 cd periskope
 ```
 
