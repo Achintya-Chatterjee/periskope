@@ -4,7 +4,7 @@ import { AuthProvider } from "@/components/auth-provider";
 
 export const metadata: Metadata = {
   title: "Periskope App",
-  description: "Made with :heart: by Achintya",
+  description: "Made with love by Achintya",
 };
 
 export default function RootLayout({
