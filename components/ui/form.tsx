@@ -48,7 +48,7 @@ const useFormField = () => {
 
   const fieldState = getFieldState(fieldContext.name, formState)
 
-  if (!fieldContext) {
+  if (!fieldContext || !fieldContext.name) {
     throw new Error("useFormField should be used within <FormField>")
   }
 
@@ -157,7 +157,7 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn("text-sm font-medium text-destructive", className)}
+      className={cn("text-sm font-medium", error && "text-destructive", className)}
       {...props}
     >
       {body}
