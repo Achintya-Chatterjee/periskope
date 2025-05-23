@@ -4,42 +4,42 @@ This is a real-time chat application built as a take-home assignment for a Full-
 
 ## Features
 
-*   **User Authentication:**
-    *   Sign-up with email and password.
-    *   Sign-in for existing users.
-    *   Secure session management.
-    *   Automatic creation of a user profile in the database upon sign-up.
-*   **Real-time Chat:**
-    *   View a list of your chats.
-    *   Open a chat to view the conversation history.
-    *   Send messages that are stored in the database.
-    *   Receive messages from other users in real-time without needing to refresh.
-*   **Route Protection:**
-    *   Unauthenticated users are redirected to the `/login` page.
-    *   Authenticated users attempting to access `/login` are redirected to the main chat interface (`/`).
-*   **Pixel-Perfect UI:** UI designed to match provided specifications (based on the assignment requirements).
+- **User Authentication:**
+  - Sign-up with email and password.
+  - Sign-in for existing users.
+  - Secure session management.
+  - Automatic creation of a user profile in the database upon sign-up.
+- **Real-time Chat:**
+  - View a list of your chats.
+  - Open a chat to view the conversation history.
+  - Send messages that are stored in the database.
+  - Receive messages from other users in real-time without needing to refresh.
+- **Route Protection:**
+  - Unauthenticated users are redirected to the `/login` page.
+  - Authenticated users attempting to access `/login` are redirected to the main chat interface (`/`).
+- **Pixel-Perfect UI:** UI designed to match provided specifications (based on the assignment requirements).
 
 ## Tech Stack
 
-*   **Frontend:**
-    *   [Next.js](https://nextjs.org/) (v15+ with App Router)
-    *   [React](https://reactjs.org/)
-    *   [TypeScript](https://www.typescriptlang.org/)
-    *   [Tailwind CSS](https://tailwindcss.com/) for styling
-    *   [shadcn/ui](https://ui.shadcn.com/) 
-*   **Backend & Database:**
-    *   [Supabase](https://supabase.io/)
-        *   Authentication
-        *   PostgreSQL Database
-        *   Realtime Subscriptions
-*   **Package Manager:**
-    *   [pnpm](https://pnpm.io/)
+- **Frontend:**
+  - [Next.js](https://nextjs.org/) (v15+ with App Router)
+  - [React](https://reactjs.org/)
+  - [TypeScript](https://www.typescriptlang.org/)
+  - [Tailwind CSS](https://tailwindcss.com/) for styling
+  - [shadcn/ui](https://ui.shadcn.com/)
+- **Backend & Database:**
+  - [Supabase](https://supabase.io/)
+    - Authentication
+    - PostgreSQL Database
+    - Realtime Subscriptions
+- **Package Manager:**
+  - [pnpm](https://pnpm.io/)
 
 ## Prerequisites
 
-*   Node.js (v18 or later recommended)
-*   pnpm Package Manager
-*   A Supabase account and project.
+- Node.js (v18 or later recommended)
+- pnpm Package Manager
+- A Supabase account and project.
 
 ## Getting Started
 
@@ -268,54 +268,56 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 
 A brief overview of important directories:
 
-*   `periskope/app/`: Contains the Next.js App Router pages.
-    *   `app/layout.tsx`: Root layout, wraps the application with `AuthProvider`.
-    *   `app/page.tsx`: Main page, displays the chat interface for authenticated users.
-    *   `app/login/page.tsx`: Login and sign-up page.
-*   `periskope/components/`: Reusable React components.
-    *   `components/auth-provider.tsx`: Manages user authentication state and route protection.
-    *   `components/chat-interface.tsx`: The main UI component for displaying chats and messages.
-    *   `components/header.tsx`: Application header, includes the Sign Out button.
-    *   `components/sidebar.tsx`: Displays the list of user's chats.
-    *   `components/ui/`: UI components (likely from shadcn/ui).
-*   `periskope/lib/`: Utility functions and type definitions.
-    *   `lib/supabaseClient.ts`: Initializes the Supabase client.
-    *   `lib/types.ts`: TypeScript type definitions for the application.
-*   `periskope/public/`: Static assets.
-*   `periskope/styles/`: Global styles.
+- `periskope/app/`: Contains the Next.js App Router pages.
+  - `app/layout.tsx`: Root layout, wraps the application with `AuthProvider`.
+  - `app/page.tsx`: Main page, displays the chat interface for authenticated users.
+  - `app/login/page.tsx`: Login and sign-up page.
+- `periskope/components/`: Reusable React components.
+  - `components/auth-provider.tsx`: Manages user authentication state and route protection.
+  - `components/chat-interface.tsx`: The main UI component for displaying chats and messages.
+  - `components/header.tsx`: Application header, includes the Sign Out button.
+  - `components/sidebar.tsx`: Displays the list of user's chats.
+  - `components/ui/`: UI components (likely from shadcn/ui).
+- `periskope/lib/`: Utility functions and type definitions.
+  - `lib/supabaseClient.ts`: Initializes the Supabase client.
+  - `lib/types.ts`: TypeScript type definitions for the application.
+- `periskope/public/`: Static assets.
+- `periskope/styles/`: Global styles.
 
 ## Key Components Explained
 
-*   **`lib/supabaseClient.ts`**:
-    This file initializes and exports the Supabase client instance using the environment variables `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. This client is used throughout the application to interact with Supabase services (Auth, Database, Realtime).
+- **`lib/supabaseClient.ts`**:
+  This file initializes and exports the Supabase client instance using the environment variables `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. This client is used throughout the application to interact with Supabase services (Auth, Database, Realtime).
 
-*   **`components/auth-provider.tsx`**:
-    This component is crucial for managing user authentication. It:
-    *   Uses a React Context to provide user session data (`user`, `session`, `isLoading`) to its children.
-    *   Subscribes to Supabase's `onAuthStateChange` to keep the session up-to-date.
-    *   Implements route protection:
-        *   Redirects unauthenticated users trying to access protected routes (like `/`) to `/login`.
-        *   Redirects authenticated users trying to access `/login` to `/`.
-    *   Provides `signIn`, `signUp`, and `signOut` functions.
+- **`components/auth-provider.tsx`**:
+  This component is crucial for managing user authentication. It:
 
-*   **`app/login/page.tsx`**:
-    Handles the user interface and logic for user sign-up and sign-in using the functions provided by `AuthProvider` (which internally call Supabase auth methods).
+  - Uses a React Context to provide user session data (`user`, `session`, `isLoading`) to its children.
+  - Subscribes to Supabase's `onAuthStateChange` to keep the session up-to-date.
+  - Implements route protection:
+    - Redirects unauthenticated users trying to access protected routes (like `/`) to `/login`.
+    - Redirects authenticated users trying to access `/login` to `/`.
+  - Provides `signIn`, `signUp`, and `signOut` functions.
 
-*   **`components/chat-interface.tsx`**:
-    This is the heart of the chat functionality. It:
-    *   Fetches the list of chats for the currently logged-in user.
-    *   Displays these chats in a sidebar (likely using `components/sidebar.tsx`).
-    *   Allows users to select a chat to view messages.
-    *   Fetches messages for the selected chat.
-    *   Provides an input to send new messages.
-    *   Subscribes to Supabase Realtime for new messages in the active chat and updates to the chat list.
+- **`app/login/page.tsx`**:
+  Handles the user interface and logic for user sign-up and sign-in using the functions provided by `AuthProvider` (which internally call Supabase auth methods).
 
-*   **Database Schema & RLS**:
-    *   **`profiles`**: Stores public user data, linked to `auth.users`. Automatically populated on new user sign-up via a trigger.
-    *   **`chats`**: Stores information about each chat conversation.
-    *   **`chat_participants`**: A junction table linking users to chats.
-    *   **`messages`**: Stores all messages, linked to a chat and a user.
-    *   Row Level Security (RLS) policies are implemented for all tables to ensure users can only access and modify data they are permitted to (e.g., only see chats they are part of, only send messages in their chats).
+- **`components/chat-interface.tsx`**:
+  This is the heart of the chat functionality. It:
+
+  - Fetches the list of chats for the currently logged-in user.
+  - Displays these chats in a sidebar (likely using `components/sidebar.tsx`).
+  - Allows users to select a chat to view messages.
+  - Fetches messages for the selected chat.
+  - Provides an input to send new messages.
+  - Subscribes to Supabase Realtime for new messages in the active chat and updates to the chat list.
+
+- **Database Schema & RLS**:
+  - **`profiles`**: Stores public user data, linked to `auth.users`. Automatically populated on new user sign-up via a trigger.
+  - **`chats`**: Stores information about each chat conversation.
+  - **`chat_participants`**: A junction table linking users to chats.
+  - **`messages`**: Stores all messages, linked to a chat and a user.
+  - Row Level Security (RLS) policies are implemented for all tables to ensure users can only access and modify data they are permitted to (e.g., only see chats they are part of, only send messages in their chats).
 
 ## Testing
 
@@ -329,11 +331,26 @@ To test the application, including real-time message updates between different u
 
 **For submission/evaluation purposes, you can use the following pre-configured test accounts which should have some chat history:**
 
-*   **User 1:**
-    *   Email: `achintyachatterjee.jara@gmail.com`
-    *   Password: `Bumba@1997`
-*   **User 2:**
-    *   Email: `bumba.jara@gmail.com`
-    *   Password: `Bumba@1997`
+- **User 1:**
+  - Email: `achintyachatterjee.jara@gmail.com`
+  - Password: `Bumba@1997`
+- **User 2:**
+  - Email: `bumba.jara@gmail.com`
+  - Password: `Bumba@1997`
 
 It's recommended to log in with these accounts on separate browsers or incognito windows to test the real-time functionality effectively.
+
+### Running Tests
+
+To run the automated tests for the components, use the following command:
+
+```bash
+pnpm test
+```
+
+This will execute the Jest test suite and provide a summary of the test results.
+To get a coverage report run:
+
+```bash
+pnpm test:coverage
+```
